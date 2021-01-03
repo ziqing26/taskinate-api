@@ -1,9 +1,9 @@
 class Api::V1::TasksController < ApplicationController
   before_action :set_task, only: [:show, :update, :destroy]
-  
+
   def index
     @tasks = Task.order("created_at DESC")
-    render json: @tasks
+    render json: @tasks, include: ['tags']
   end
 
   def show
@@ -28,12 +28,15 @@ class Api::V1::TasksController < ApplicationController
     head :no_content, status: :ok
   end
 
+
+
   private
+
     def set_task
       @task = Task.find(params[:id])
     end
 
     def task_param
-      params.require(:task).permit(:title, :done, :desciption, :due_time)
+      params.require(:task).permit(:title, :done, :desciption, :due_time, tag_task_ids: [])
     end
 end
