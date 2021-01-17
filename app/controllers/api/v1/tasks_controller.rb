@@ -7,8 +7,13 @@ class Api::V1::TasksController < ApplicationController
   end
 
   def show
-    render json: @task
+    render json: @task, include: ['tags']
   end
+  #   render json: {
+  #     task: @task,
+  #     tags: @task.tags
+  #   }
+  # end
 
   def create
     @task = Task.create(task_param)
@@ -17,6 +22,7 @@ class Api::V1::TasksController < ApplicationController
 
   def update
     if @task.update(task_param)
+      # @task.tags.build(params[:tag_ids])
       render json: @task
     else
       render json: @task.errors, status: :unprocessable_entity
@@ -29,14 +35,13 @@ class Api::V1::TasksController < ApplicationController
   end
 
 
-
   private
 
     def set_task
-      @task = Task.find(params[:id])
+      @task ||= Task.find(params[:id])
     end
 
     def task_param
-      params.require(:task).permit(:title, :done, :desciption, :due_time, tag_task_ids: [])
+      params.permit(:title, :done, :description, :due_time, tag_ids: [], tag_task_ids: [])
     end
 end

@@ -10,18 +10,18 @@ class Api::V2::TagsController < ApplicationController
 
   # GET /tags/1
   def show
-    render json: @tag
+    render json: @tag, include:['tasks']
   end
 
   # POST /tags
   def create
-    @tag = Tag.new(tag_params)
-
-    if @tag.save
-      render json: @tag, status: :created, location: @tag
-    else
-      render json: @tag.errors, status: :unprocessable_entity
-    end
+    @tag = Tag.create(tag_params)
+    render json: @tag
+    # if @tag.save
+    #   render json: @tag, status: :created, location: @tag
+    # else
+    #   render json: @tag.errors, status: :unprocessable_entity
+    # end
   end
 
   # PATCH/PUT /tags/1
