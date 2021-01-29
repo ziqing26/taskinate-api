@@ -1,13 +1,20 @@
 class Api::V1::TasksController < ApplicationController
+  before_action :verify_loggin
+  before_action :verify_user, except: [:index, :create]
   before_action :set_task, only: [:show, :update, :destroy]
 
   def index
-    @tasks = Task.order("created_at DESC")
+    @tasks = current_user.tasks.order("created_at DESC")
     render json: @tasks, include: ['tags']
   end
 
   def show
-    render json: @task, include: ['tags']
+    if (task.user == current_user)
+      render json: @task, include: ['tags']
+    else
+      redirect_to root_path
+    end
+
   end
   #   render json: {
   #     task: @task,
@@ -17,7 +24,12 @@ class Api::V1::TasksController < ApplicationController
 
   def create
     @task = Task.create(task_param)
-    render json: @task   
+    @task.user = current_user
+    if @task.save
+      render json: @task   
+    else
+      render json:  @task.errors.full_messages
+    end
   end
 
   def update
@@ -44,4 +56,24 @@ class Api::V1::TasksController < ApplicationController
     def task_param
       params.permit(:title, :done, :description, :due_time, tag_ids: [], tag_task_ids: [])
     end
+
+    def verify_loggin
+      unless logged_in?
+        redirect_to root_path
+      end
+    end
+
+    def verify_user
+      if logged_in?
+        if set_task
+          if @task.user != current_user
+            redirect_to root_path
+          end
+        end
+      else 
+        redirect_to root_path
+      end
+    end
+
+
 end

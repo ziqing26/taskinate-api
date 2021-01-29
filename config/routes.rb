@@ -8,7 +8,15 @@ Rails.application.routes.draw do
     end
     namespace :v3 do
       post '/login', to: 'sessions#create'
+      delete '/logout', to: 'sessions#destroy'
+      get '/logged_in', to: 'sessions#is_logged_in?'
+      # resources :sessions, only: [:create]
+      # resources :registrations, only: [:create]
+      resources :users, only: [:create, :show, :index]
     end
+
+    root 'static#home'
+    get '*/path' => 'static#home'
   end
 
 
