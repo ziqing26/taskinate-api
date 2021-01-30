@@ -12,8 +12,8 @@ class ApplicationController < ActionController::API
     end
 
     def logged_in?
-        # !!session[:user_id]
-        !!current_user
+        !!session[:user_id]
+        # !!current_user
     end
     
     def authorized_user?
