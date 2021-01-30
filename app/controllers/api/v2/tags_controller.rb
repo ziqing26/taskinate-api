@@ -1,5 +1,5 @@
 class Api::V2::TagsController < ApplicationController
-  before_action :verify_loggin
+  # before_action :verify_loggin
   before_action :verify_user, except: [:index, :create]
   before_action :set_tag, only: [:show, :update, :destroy]
 
@@ -60,11 +60,11 @@ class Api::V2::TagsController < ApplicationController
       params.require(:tag).permit(:name, tag_task_id: [])
     end
 
-    def verify_loggin
-      unless logged_in?
-        redirect_to root_path
-      end
-    end
+    # def verify_loggin
+    #   unless logged_in?
+    #     redirect_to root_path
+    #   end
+    # end
 
     def verify_user
       if logged_in?
