@@ -14,11 +14,9 @@ Rails.application.routes.draw do
       # resources :registrations, only: [:create]
       resources :users, only: [:create, :show, :index]
     end
-
-    root 'static#home'
-    get '*/path' => 'static#home'
   end
-
+  root 'static#home'
+  get '*/path' => 'static#home'
 
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
