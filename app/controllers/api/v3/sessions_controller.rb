@@ -1,4 +1,6 @@
 class Api::V3::SessionsController < ApplicationController
+    include CurrentUserConcern
+    
     def create
         @user = User.find_by(email: session_params[:email])
 
