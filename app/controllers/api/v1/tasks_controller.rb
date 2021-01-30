@@ -4,7 +4,7 @@ class Api::V1::TasksController < ApplicationController
   before_action :set_task, only: [:show, :update, :destroy]
 
   def index
-    @tasks = current_user.tasks.order("created_at DESC")
+    @tasks = current_user.Task.all.order("created_at DESC")
     render json: @tasks, include: ['tags']
   end
 

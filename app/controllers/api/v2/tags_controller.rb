@@ -6,7 +6,7 @@ class Api::V2::TagsController < ApplicationController
   # GET /tags
   def index
     #@tags = Tag.all
-    @tags = current_user.tags.order("created_at ASC")
+    @tags = current_user.Tag.all.order("created_at ASC")
     render json: @tags, include: ['tasks']
   end
 
