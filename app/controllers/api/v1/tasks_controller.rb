@@ -1,10 +1,10 @@
 class Api::V1::TasksController < ApplicationController
-  # before_action :verify_loggin
+  before_action :verify_loggin
   before_action :verify_user, except: [:index, :create]
   before_action :set_task, only: [:show, :update, :destroy]
 
   def index
-    @tasks = current_user.Task.all.order("created_at DESC")
+    @tasks = current_user.tasks.order("created_at DESC")
     render json: @tasks, include: ['tags']
   end
 
@@ -57,11 +57,11 @@ class Api::V1::TasksController < ApplicationController
       params.permit(:title, :done, :description, :due_time, tag_ids: [], tag_task_ids: [])
     end
 
-    # def verify_loggin
-    #   unless logged_in?
-    #     redirect_to root_path
-    #   end
-    # end
+    def verify_loggin
+      unless logged_in?
+        redirect_to root_path
+      end
+    end
 
     def verify_user
       if logged_in?
@@ -70,8 +70,6 @@ class Api::V1::TasksController < ApplicationController
             redirect_to root_path
           end
         end
-      else 
-        redirect_to root_path
       end
     end
 
